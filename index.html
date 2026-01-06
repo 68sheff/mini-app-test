@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <!-- Подключаем скрипт Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        button {
+            background-color: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Привет!</h1>
+    <p id="username">Загрузка...</p>
+    
+    <button onclick="closeApp()">Закрыть приложение</button>
+
+    <script>
+        // Инициализация
+        const tg = window.Telegram.WebApp;
+
+        // Сообщаем телеграму, что приложение готово
+        tg.ready();
+
+        // Разворачиваем на весь экран
+        tg.expand(); 
+
+        // Получаем данные пользователя
+        const user = tg.initDataUnsafe.user;
+
+        const userElem = document.getElementById('username');
+        if (user) {
+            userElem.innerText = `Ты: ${user.first_name} ${user.last_name || ''}`;
+        } else {
+            userElem.innerText = 'Запущено не из Telegram?';
+        }
+
+        // Функция закрытия
+        function closeApp() {
+            tg.close();
+        }
+        
+        // Главная кнопка (Main Button) внизу
+        tg.MainButton.setText("Отправить данные боту");
+        tg.MainButton.show();
+        
+        tg.MainButton.onClick(function() {
+            // Отправляем данные обратно боту
+            tg.sendData("Привет от Web App!");
+        });
+    </script>
+</body>
+</html>
+
