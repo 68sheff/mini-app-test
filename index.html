@@ -2,74 +2,67 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Mini App</title>
-    <!-- Подключаем скрипт Telegram Web App -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Прием номеров T2</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: var(--tg-theme-bg-color, #fff);
-            color: var(--tg-theme-text-color, #000);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        button {
-            background-color: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #fff);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Привет!</h1>
-    <p id="username">Загрузка...</p>
-    
-    <button onclick="closeApp()">Закрыть приложение</button>
 
-    <script>
-        // Инициализация
-        const tg = window.Telegram.WebApp;
-
-        // Сообщаем телеграму, что приложение готово
-        tg.ready();
-
-        // Разворачиваем на весь экран
-        tg.expand(); 
-
-        // Получаем данные пользователя
-        const user = tg.initDataUnsafe.user;
-
-        const userElem = document.getElementById('username');
-        if (user) {
-            userElem.innerText = `Ты: ${user.first_name} ${user.last_name || ''}`;
-        } else {
-            userElem.innerText = 'Запущено не из Telegram?';
-        }
-
-        // Функция закрытия
-        function closeApp() {
-            tg.close();
-        }
+    <div class="container">
         
-        // Главная кнопка (Main Button) внизу
-        tg.MainButton.setText("Отправить данные боту");
-        tg.MainButton.show();
-        
-        tg.MainButton.onClick(function() {
-            // Отправляем данные обратно боту
-            tg.sendData("Привет от Web App!");
-        });
-    </script>
+        <!-- ЭКРАН 1: СПИСОК РЕГИОНОВ -->
+        <div id="screen-main">
+            <header>
+                <h1>Прием номеров T2</h1>
+                <h2>Выберите регион для сдачи</h2>
+            </header>
+            
+            <div id="region-list" class="region-list">
+                <!-- Сюда вставляются карточки через JS -->
+                <div class="glass-card" style="text-align: center; padding: 40px;">
+                    Загрузка регионов...
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 2: ФОРМА ВВОДА -->
+        <div id="screen-form" class="form-screen">
+            <button class="btn-back" onclick="goBack()">
+                ← Назад к списку
+            </button>
+
+            <header style="margin-top: 0;">
+                <h1 id="selected-region-title">Регион</h1>
+                <h2 id="price-tag" style="color: var(--success);">Выплата: 0₽</h2>
+            </header>
+
+            <div class="glass-card">
+                <div class="input-group">
+                    <label for="phone-input">Введите номер телефона</label>
+                    <input type="tel" id="phone-input" placeholder="+7 (999) 000-00-00" autocomplete="off">
+                </div>
+
+                <button id="submit-btn" class="btn-main">
+                    Сдать номер
+                </button>
+                <p style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-top: 15px;">
+                    Нажимаю кнопку, вы подтверждаете передачу номера.
+                </p>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 3: УСПЕХ -->
+        <div id="screen-success" class="glass-card success-message">
+            <span class="success-icon">✅</span>
+            <h1>Номер принят!</h1>
+            <p style="color: var(--text-secondary);">Вам будет начислено:</p>
+            <h2 id="success-amount" style="font-size: 32px; color: var(--success); margin: 10px 0;">0₽</h2>
+            <p style="font-size: 14px;">Сейчас приложение закроется...</p>
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
 </body>
 </html>
-
